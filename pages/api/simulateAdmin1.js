@@ -1,7 +1,7 @@
 // pages/api/simulate.js
 
 import { executeCommand } from "../../components/CommandHandler";
-import commands from "../../components/commands";
+import commands from "@/components/filemanagmentTest";
 import fs from "fs";
 import path from "path";
 

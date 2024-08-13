@@ -95,6 +95,35 @@ const commands = [
   "hwclock",
   "sudo apt update",
   "sudo apt install package",
+
+  // Additional administrative commands
+  "mkdir new_directory", // Creating a new directory
+  "touch new_directory/newfile.txt", // Creating a new file inside the directory
+  "mv new_directory/newfile.txt renamed.txt", // Renaming the file
+  "cp renamed.txt new_directory/", // Copying the file back to the directory
+  "rm new_directory/renamed.txt", // Removing the file inside the directory
+  "ls -la", // Listing all files including hidden ones
+  "chmod 755 new_directory", // Changing permissions of the directory
+  "chown user:group new_directory", // Changing ownership of the directory
+  "tar -cvf archive.tar new_directory", // Archiving the directory
+  "gzip archive.tar", // Compressing the archive
+  "gunzip archive.tar.gz", // Decompressing the archive
+  "rm -r new_directory", // Removing the directory and its contents
+  "df -h", // Checking disk space usage
+  "du -sh new_directory", // Checking directory size
+  "find /home/user -name '*.txt'", // Finding all .txt files in the user's home
+  "echo 'Appended text' >> file.txt", // Appending text to a file
+  "stat newfile.txt", // Getting file statistics
+  "head -n 10 file.txt", // Displaying the first 10 lines of a file
+  "tail -n 10 file.txt", // Displaying the last 10 lines of a file
+  "grep 'pattern' file.txt", // Searching for a pattern in a file
+  "sort file.txt", // Sorting contents of a file
+  "uniq file.txt", // Removing duplicate lines from a file
+  "chmod 644 file.txt", // Changing file permissions
+  "chown user:user file.txt", // Changing file ownership
+  "ln -s file.txt symlink.txt", // Creating a symbolic link
+  "touch newfile{1..3}.txt", // Creating multiple files at once
+  "rm *.txt", // Deleting all .txt files in the current directory
 ];
 
 export default commands;

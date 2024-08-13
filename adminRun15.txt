@@ -1,0 +1,81 @@
+Command: pwd
+Output: /root/home/user
+
+Command: ls -la
+Output: Documents/ Downloads/ Music/ Pictures/ Videos/ Projects/ Ideas/
+
+Command: mkdir testDir
+Output: 
+
+Command: cd testDir
+Output: 
+
+Command: touch testFile.txt
+Output: touch: created 'testFile.txt'
+
+Command: ls -la
+Output: testFile.txt
+
+Command: chmod 755 testFile.txt
+Output: chmod: changed permissions of 'testFile.txt'
+
+Command: ls -la
+Output: testFile.txt
+
+Command: chown user:group testFile.txt
+Output: chown: changed ownership of 'testFile.txt'
+
+Command: echo 'This is a test file.' > anotherFile.txt
+Output: 
+
+Command: cat anotherFile.txt
+Output: 'This is a test file.'
+
+Command: cp anotherFile.txt copiedFile.txt
+Output: 
+
+Command: mv copiedFile.txt renamedFile.txt
+Output: 
+
+Command: ln -s renamedFile.txt symlink.txt
+Output: 
+
+Command: ls -la
+Output: testFile.txt anotherFile.txt renamedFile.txt/ symlink.txt/
+
+Command: find . -name '*.txt'
+Output: 
+
+Command: tar -cvf testArchive.tar .
+Output: tar: creating archive 'testArchive.tar' containing '.'
+Archive created successfully.
+
+Command: ls -la
+Output: testFile.txt anotherFile.txt renamedFile.txt/ symlink.txt/
+
+Command: gzip testArchive.tar
+Output: gzip: testArchive.tar: No such file or directory
+
+Command: ls -la
+Output: testFile.txt anotherFile.txt renamedFile.txt/ symlink.txt/
+
+Command: gunzip testArchive.tar.gz
+Output: gunzip: testArchive.tar.gz: No such file or directory
+
+Command: ls -la
+Output: testFile.txt anotherFile.txt renamedFile.txt/ symlink.txt/
+
+Command: tar -xvf testArchive.tar
+Output: tar: invalid syntax or missing operand
+
+Command: ls -la
+Output: testFile.txt anotherFile.txt renamedFile.txt/ symlink.txt/
+
+Command: rm -r *
+Output: 
+
+Command: cd ..
+Output: 
+
+Command: rm -r testDir
+Output: 

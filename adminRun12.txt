@@ -1,0 +1,587 @@
+Command: pwd
+Output: /root/home/user
+
+Command: ss
+Output: Netid  State      Recv-Q Send-Q       Local Address:Port          Peer Address:Port 
+tcp    ESTAB      0      0            192.168.1.100:ssh           192.168.1.101:5566
+tcp    LISTEN     0      128          127.0.0.1:ipp               0.0.0.0:*        
+tcp    LISTEN     0      128          [::1]:ipp                   [::]:*           
+udp    UNCONN     0      0            0.0.0.0:bootpc              0.0.0.0:*        
+
+
+Command: netstat
+Output: Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 192.168.1.100:22        192.168.1.101:5566       ESTABLISHED
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN
+tcp6       0      0 ::1:631                 :::*                    LISTEN
+udp        0      0 0.0.0.0:68              0.0.0.0:*               
+udp        0      0 192.168.1.100:123       0.0.0.0:*               
+udp6       0      0 ::1:123                 :::*                    
+
+
+Command: ip addr
+Output: 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 00:0c:29:68:22:78 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global dynamic eth0
+       valid_lft 86009sec preferred_lft 86009sec
+
+Command: ifconfig
+Output: eth0      Link encap:Ethernet  HWaddr 00:0c:29:68:22:78  
+          inet addr:192.168.1.100  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:208222 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:148158 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:212999848 (212.9 MB)  TX bytes:13287640 (13.2 MB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:4 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:4 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1 
+          RX bytes:240 (240.0 B)  TX bytes:240 (240.0 B)
+
+Command: vim file.txt
+Output: Vim: Editing file 'file.txt'...
+-- INSERT --
+Press :wq to save and quit.
+:wq
+Vim: 'file.txt' saved.
+
+Command: ls
+Output: Documents/ Downloads/ Music/ Pictures/ Videos/ Projects/ Ideas/
+
+Command: cd /home
+Output: cd: no such file or directory: /home
+
+Command: mkdir testDir
+Output: 
+
+Command: touch newfile.txt
+Output: touch: created 'newfile.txt'
+
+Command: rm newfile.txt
+Output: 
+
+Command: mv oldfile.txt newfile.txt
+Output: mv: cannot move 'oldfile.txt': No such file or directory
+
+Command: cat newfile.txt
+Output: cat: newfile.txt: No such file or directory
+
+Command: echo 'Hello World' > file.txt
+Output: 
+
+Command: cp file.txt copy.txt
+Output: 
+
+Command: ps
+Output:   PID TTY          TIME CMD
+1001 pts/0    00:00:00 bash
+1002 pts/0    00:00:00 ssh
+1003 pts/0    00:00:00 vim
+1004 pts/0    00:00:00 node
+1005 pts/0    00:00:00 npm
+1006 pts/0    00:00:00 htop
+
+
+Command: kill 1234
+Output: kill: 1234: No such process
+
+Command: top
+Output: top - 00:00:00 up 2 hours, 0 minutes,  1 user,  load average: 0.01, 0.02, 0.27
+Tasks: 100 total,   1 running,  99 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.3 us,  0.2 sy,  0.0 ni, 99.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  16000.0 total,   8000.0 free,   4096.0 used,   2904.0 buff/cache
+MiB Swap:  8000.0 total,   6000.0 free,   1000.0 used,   1000.0 avail Mem
+
+Command: htop
+Output: PID USER      PRI  NI  VIRT   RES   SHR S CPU% MEM%   TIME+  Command
+1001 user      20   0  1234M  12M   4M R  0.3  0.1   0:00.00 bash
+1002 user      20   0  1234M  12M   4M R  0.3  0.1   0:00.00 ssh
+1003 user      20   0  1234M  12M   4M R  0.3  0.1   0:00.00 vim
+1004 user      20   0  1234M  12M   4M R  0.3  0.1   0:00.00 node
+1005 user      20   0  1234M  12M   4M R  0.3  0.1   0:00.00 npm
+1006 user      20   0  1234M  12M   4M R  0.3  0.1   0:00.00 htop
+
+
+Command: date
+Output: Tue Aug 13 2024 17:05:21 GMT+0200 (Mitteleuropäische Sommerzeit)
+
+Command: whoami
+Output: user
+
+Command: hostname
+Output: localhost
+
+Command: uname -a
+Output: Linux localhost 5.4.0-52-generic #57-Ubuntu SMP Fri Oct 2 06:27:32 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux
+
+Command: uptime
+Output: up 2 hours, 0 minutes, 1 user, load average: 0.00, 0.01, 0.05
+
+Command: cal
+Output:     August 2024
+Su Mo Tu We Th Fr Sa
+             1  2  3
+ 4  5  6  7  8  9 10
+11 12 13 14 15 16 17
+18 19 20 21 22 23 24
+25 26 27 28 29 30 31
+
+Command: bc
+Output: Interactive calculator not supported
+
+Command: df -h
+Output: Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       100G   50G   50G  50% /
+tmpfs           3.9G   1M  3.9G   1% /run
+udev            3.9G   0    3.9G   0% /dev
+/dev/sdb1       40G   10G   30G  25% /home
+
+
+Command: du -sh *
+Output: 100K  ./test
+1M  ./home/user
+5M  ./root
+
+Command: free -m
+Output:               total        used        free      shared  buff/cache   available
+Mem:        16384000    8192000     4096000      204800     2048000     12288000
+Swap:        8192000     2048000     6144000
+
+
+Command: id
+Output: uid=1000(user) gid=1000(user) groups=1000(user),27(sudo),1001(admin)
+
+Command: who
+Output: user pts/0 2024-08-01 00:00 (:0)
+
+Command: w
+Output: 00:00:00 up 1:23, 1 user, load average: 0.00, 0.00, 0.00
+user     pts/0    :0               00:00    1:23   0.00s  0.00s -bash
+
+Command: last
+Output: user    pts/0        :0               Fri Aug  1 00:00   still logged in
+
+Command: grep 'search term' file.txt
+Output: grep: term': No such file or directory
+
+Command: which ls
+Output: /usr/bin/ls
+
+Command: locate file.txt
+Output: root/home/user/file.txt
+root/home/user/copy.txt/file.txt
+
+Command: diff file1.txt file2.txt
+Output: diff: file1.txt: No such file or directory
+
+Command: sort file.txt
+Output: file.txt
+
+Command: uniq file.txt
+Output: file.txt
+
+Command: head file.txt
+Output: 'Hello World'
+
+Command: tail file.txt
+Output: tail: invalid syntax or missing operand
+
+Command: wc file.txt
+Output: 1 2 13 file.txt
+
+Command: tee file.txt
+Output: 
+
+Command: awk '{print $1}' file.txt
+Output: awk: $1}': No such file or directory
+
+Command: sed 's/old/new/g' file.txt
+Output: sed: undefined: No such file or directory
+
+Command: cut -d':' -f1 /etc/passwd
+Output: cut: -f1: No such file or directory
+
+Command: tr 'a-z' 'A-Z'
+Output: Replaced all occurrences of ''a-z'' with ''A-Z'' in files.
+
+Command: stat file.txt
+Output: File: file.txt
+Size: 1234	Blocks: 8	IO Block: 4096  regular file
+Device: 801h/2049d	Inode: 12345	Links: 1
+Access: (0644/-rw-r--r--)  Uid: (1000/user)   Gid: (1000/user)
+Access: 2024-08-01 00:00:00.000000000
+Modify: 2024-08-01 00:00:00.000000000
+Change: 2024-08-01 00:00:00.000000000
+
+Command: file file.txt
+Output: file.txt: ASCII text
+
+Command: lsblk
+Output: NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0  100G  0 disk 
+├─sda1   8:1    0  100G  0 part /
+sdb      8:16   0   40G  0 disk 
+└─sdb1   8:17   0   40G  0 part /home
+sr0     11:0    1 1024M  0 rom  /media/cdrom
+
+Command: parted /dev/sda print
+Output: parted: unrecognized option /dev/sda
+
+Command: fdisk -l
+Output: Disk /dev/sda: 100 GiB, 107374182400 bytes, 209715200 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: gpt
+Disk identifier: 12345678-9ABC-DEF0-1234-56789ABCDEF0
+
+Device     Start       End   Sectors  Size Type
+/dev/sda1   2048    2099199  2097152    1G Linux filesystem
+/dev/sda2 2099200 209715199 207616000  99G Linux filesystem
+
+
+Command: mkfs.ext4 /dev/sda1
+Output: mke2fs 1.45.6 (20-Mar-2020)
+Creating ext4 filesystem with size /dev/sda1 on ext4
+Allocating group tables: done
+Writing inode tables: done
+Creating journal: done
+Writing superblocks and filesystem accounting information: done
+
+ext4 formatted as ext4
+
+Command: fsck /dev/sda1
+Output: fsck from util-linux 2.34
+/dev/sda1: clean, 12345/67890 files, 98765/123456 blocks
+
+Command: umount /mnt
+Output: umount: unmounting /mnt...
+
+Command: mount /dev/sda1 /mnt
+Output: mount: mounting /dev/sda1 on /mnt type undefined...
+
+Command: modprobe -r module
+Output: modprobe: Removing module 'module'
+
+Command: lsmod
+Output: Module                  Size  Used by
+ext4                   741376  1
+mbcache                 16384  2 ext4
+jbd2                   106496  1 ext4
+evdev                   24576  16
+serio_raw               16384  0
+psmouse               147456  0
+
+
+Command: ln -s target linkname
+Output: 
+
+Command: xargs rm < files.txt
+Output: Command not found: xargs
+
+Command: jobs
+Output: No jobs
+
+Command: bg
+Output: bg: undefined: No such job
+
+Command: fg
+Output: fg: undefined: No such job
+
+Command: pkill vim
+Output: 
+
+Command: nohup command &
+Output: nohup: ignoring input and redirecting stderr to stdout
+
+Command: shutdown -h now
+Output: System is going down for reboot NOW!
+[  OK  ] Reached target Shutdown.
+[  OK  ] Finished Reboot.
+Broadcast message from root@localhost (Fri Aug  1 00:00:00 2024):
+
+The system is going down for reboot NOW!
+
+Command: reboot
+Output: Rebooting...
+[  OK  ] Stopped target Reboot.
+[  OK  ] Finished Reboot.
+[  OK  ] Reached target Reboot.
+Rebooting system.
+
+
+Command: halt
+Output: System halted
+[  OK  ] Reached target Halt.
+[  OK  ] Finished Halt.
+
+
+Command: sync
+Output: Syncing disks...
+[  OK  ] Reached target Sync.
+[  OK  ] Finished Sync.
+
+
+Command: gzip file.txt
+Output: gzip: file.txt compressed to file.txt.gz
+
+Command: gunzip file.txt.gz
+Output: gunzip: file.txt.gz: No such file or directory
+
+Command: zip archive.zip file.txt
+Output: zip: archive.zip.zip created containing: file.txt
+
+Command: unzip archive.zip
+Output: unzip: archive.zip: No such file or directory
+
+Command: scp file.txt user@remote:/path
+Output: scp: file.txt copied to user@remote:/path
+
+Command: wget http://example.com/file.txt
+Output: --2024-08-01 00:00:00-- http://example.com/file.txt
+Resolving http://example.com/file.txt... 93.184.216.34
+Connecting to http://example.com/file.txt|93.184.216.34|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: 'index.html'
+
+index.html           [ <=>                  ] 0           --.-K/s    in 0s
+2024-08-01 00:00:03 (5.00 MB/s) - 'index.html' saved [12345]
+
+Command: curl http://example.com
+Output: curl: Fetching http://example.com...
+
+Command: ping google.com
+Output: PING google.com (93.184.216.34) 56(84) bytes of data.
+64 bytes from 93.184.216.34: icmp_seq=1 ttl=56 time=29.8 ms
+64 bytes from 93.184.216.34: icmp_seq=2 ttl=56 time=30.7 ms
+64 bytes from 93.184.216.34: icmp_seq=3 ttl=56 time=32.1 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2017ms
+rtt min/avg/max/mdev = 29.8/30.87/32.1/0.959 ms
+
+Command: traceroute google.com
+Output: traceroute to google.com (93.184.216.34), 30 hops max
+ 1  192.168.0.1 (192.168.0.1)  1.000 ms  1.000 ms  1.000 ms
+ 2  93.184.216.34 (93.184.216.34)  10.000 ms  10.000 ms  10.000 ms
+ 3  * * *
+ 4  * * *
+ 5  * * *
+
+Command: nslookup google.com
+Output: Server: 8.8.8.8
+Address: 8.8.8.8#53
+
+Non-authoritative answer:
+Name: google.com
+Address: 93.184.216.34
+
+Command: ftp ftp.example.com
+Output: Connected to ftp.example.com.
+220 (vsFTPd 3.0.3)
+
+
+Command: sftp user@example.com
+Output: Connected to user@example.com.
+sftp> 
+
+Command: telnet example.com
+Output: Trying example.com...
+Connected to example.com.
+Escape character is '^]'.
+
+
+Command: ssh user@example.com
+Output: user@user@example.com:~$ ls
+Documents  Downloads  Music  Pictures  Videos
+user@user@example.com:~$ exit
+Logged out from user@example.com at 2024-08-13 17:05:28
+
+Command: exit
+Output: Session closed at 2024-08-13 17:05:28
+
+Command: dig example.com
+Output: ; <<>> DiG 9.11.3-1ubuntu1.13-Ubuntu <<>> example.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;example.com.               IN  A
+
+;; ANSWER SECTION:
+example.com.        300 IN  A   93.184.216.34
+
+Command: killall vim
+Output: killall: vim: No such process
+
+Command: watch -n 1 date
+Output: Every 2.0s: uptime                               user@localhost: Wed Aug  1 00:00:00 2024
+
+00:00:00 up 1:23, 1 user, load average: 0.00, 0.00, 0.00
+
+Command: hostnamectl
+Output:    Static hostname: localhost
+         Icon name: computer-laptop
+           Chassis: laptop
+        Machine ID: 1234567890abcdef1234567890abcdef
+           Boot ID: 1234567890abcdef1234567890abcdef
+Operating System: Linux
+            Kernel: Linux 5.4.0-52-generic
+
+Command: journalctl -xe
+Output: 2024-08-13T13:05:19.729Z localhost systemd[1]: Log entry 1
+2024-08-13T13:06:19.729Z localhost systemd[1]: Log entry 2
+2024-08-13T13:07:19.729Z localhost systemd[1]: Log entry 3
+2024-08-13T13:08:19.729Z localhost systemd[1]: Log entry 4
+2024-08-13T13:09:19.729Z localhost systemd[1]: Log entry 5
+2024-08-13T13:10:19.729Z localhost systemd[1]: Log entry 6
+2024-08-13T13:11:19.729Z localhost systemd[1]: Log entry 7
+2024-08-13T13:12:19.729Z localhost systemd[1]: Log entry 8
+2024-08-13T13:13:19.729Z localhost systemd[1]: Log entry 9
+2024-08-13T13:14:19.729Z localhost systemd[1]: Log entry 10
+
+Command: systemctl status
+Output: UNIT                        LOAD   ACTIVE SUB     DESCRIPTION
+proc-sys-fs-binfmt_misc.automount loaded active waiting  Arbitrary Executable File Formats File System Automount Point
+sys-devices-virtual-net-docker0.device loaded active plugged  /sys/devices/virtual/net/docker0
+
+Command: timedatectl
+Output: Local time: Fri 2024-08-01 00:00:00 UTC
+Universal time: Fri 2024-08-01 00:00:00 UTC
+ RTC time: Fri 2024-08-01 00:00:00
+ Time zone: Etc/UTC (UTC, +0000)
+System clock synchronized: yes
+ NTP service: active
+ RTC in local TZ: no
+
+Command: hwclock
+Output: 2024-08-01 00:00:00.000000+00:00
+
+Command: sudo apt update
+Output: Get:1 http://deb.debian.org/debian stable InRelease [116 kB]
+Get:2 http://deb.debian.org/debian stable/main Sources [5,300 kB]
+Get:3 http://deb.debian.org/debian stable/main amd64 Packages [10,000 kB]
+Fetched 15,416 kB in 3s (5,138 kB/s)
+Reading package lists... Done
+
+Command: sudo apt install package
+Output: Reading package lists... Done
+Building dependency tree... Done
+The following NEW packages will be installed:
+  package
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 500 kB of archives.
+After this operation, 2 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian stable/main package 500 kB
+Fetched 500 kB in 1s (500 kB/s)
+Selecting previously unselected package package.
+(Reading database ... 100%
+Unpacking package (1.0-1) ...
+Setting up package (1.0-1) ...
+Processing triggers for man-db (2.9.4-2) ...
+
+Command: mkdir new_directory
+Output: 
+
+Command: touch new_directory/newfile.txt
+Output: touch: created 'newfile.txt'
+
+Command: mv new_directory/newfile.txt renamed.txt
+Output: 
+
+Command: cp renamed.txt new_directory/
+Output: 
+
+Command: rm new_directory/renamed.txt
+Output: 
+
+Command: ls -la
+Output: ls: cannot access 'root,home,user,-la': No such file or directory
+
+Command: chmod 755 new_directory
+Output: chmod: changed permissions of 'new_directory'
+
+Command: chown user:group new_directory
+Output: chown: changed ownership of 'new_directory'
+
+Command: tar -cvf archive.tar new_directory
+Output: tar: creating archive 'archive.tar' containing 'new_directory'
+Archive created successfully.
+
+Command: gzip archive.tar
+Output: gzip: archive.tar: No such file or directory
+
+Command: gunzip archive.tar.gz
+Output: gunzip: archive.tar.gz: No such file or directory
+
+Command: rm -r new_directory
+Output: 
+
+Command: df -h
+Output: Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       100G   50G   50G  50% /
+tmpfs           3.9G   1M  3.9G   1% /run
+udev            3.9G   0    3.9G   0% /dev
+/dev/sdb1       40G   10G   30G  25% /home
+
+
+Command: du -sh new_directory
+Output: 100K  ./test
+1M  ./home/user
+5M  ./root
+
+Command: find /home/user -name '*.txt'
+Output: find: /home/user: No such file or directory
+
+Command: echo 'Appended text' >> file.txt
+Output: 'Appended text' >> file.txt
+
+Command: stat newfile.txt
+Output: stat: cannot stat 'newfile.txt': No such file or directory
+
+Command: head -n 10 file.txt
+Output: head: cannot open '-n': No such file or directory
+
+Command: tail -n 10 file.txt
+Output: 'Hello World'
+
+
+Command: grep 'pattern' file.txt
+Output: 
+
+Command: sort file.txt
+Output: file.txt
+
+Command: uniq file.txt
+Output: file.txt
+
+Command: chmod 644 file.txt
+Output: chmod: changed permissions of 'file.txt'
+
+Command: chown user:user file.txt
+Output: chown: changed ownership of 'file.txt'
+
+Command: ln -s file.txt symlink.txt
+Output: 
+
+Command: touch newfile{1..3}.txt
+Output: touch: created 'newfile1.txt'
+touch: created 'newfile2.txt'
+touch: created 'newfile3.txt'
+
+Command: rm *.txt
+Output: rm: cannot remove 'copy.txt': Is a directory
+rm: cannot remove 'symlink.txt': Is a directory

@@ -1,7 +1,7 @@
 // pages/api/simulate.js
 
 import { executeCommand } from "../../components/CommandHandler";
-import commands from "../../components/commands";
+import commands from "@/components/filemanagmentTest";
 
 export default async function handler(req, res) {
   const errorLog = [];

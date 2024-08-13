@@ -107,6 +107,83 @@ export async function executeCommand(command, args, history = []) {
     /// "CASES" /////////
     /////////////////////
 
+    case "find":
+      if (args.length > 2 && args[1] === "-name") {
+        const searchTerm = args[2].replace(/'/g, ""); // Remove any single quotes around the term
+        const startPath = resolvePath(currentPath, args[0]);
+        const dir = navigatePath(fs, startPath);
+        const foundFiles = [];
+
+        function searchDirectory(directory, path = []) {
+          for (const key in directory) {
+            const currentPath = [...path, key];
+            if (typeof directory[key] === "object") {
+              searchDirectory(directory[key], currentPath);
+            } else if (key.includes(searchTerm)) {
+              foundFiles.push(`/${[...startPath, ...currentPath].join("/")}`);
+            }
+          }
+        }
+
+        if (dir) {
+          searchDirectory(dir);
+          output = foundFiles.length > 0 ? foundFiles.join("\n") : "";
+        } else {
+          output = `find: ${args[0]}: No such file or directory`;
+        }
+      } else {
+        output = "find: invalid syntax or missing operand";
+      }
+      break;
+
+    case "tar":
+      if (args.length > 2 && args[0] === "-cvf") {
+        const archiveName = args[1];
+        const filePath = resolvePath(currentPath, args[2]);
+        const dir = navigatePath(fs, filePath);
+
+        if (dir) {
+          output = `tar: creating archive '${archiveName}' containing '${args[2]}'\nArchive created successfully.`;
+        } else {
+          output = `tar: ${args[2]}: No such file or directory`;
+        }
+      } else {
+        output = "tar: invalid syntax or missing operand";
+      }
+      break;
+
+    case "chown":
+      if (args.length > 1) {
+        const filePath = resolvePath(currentPath, args[1]);
+        const dir = navigatePath(fs, filePath.slice(0, -1)); // Navigate to the directory containing the file
+        const fileName = filePath[filePath.length - 1];
+
+        if (dir && dir.hasOwnProperty(fileName)) {
+          output = `chown: changed ownership of '${fileName}'`;
+        } else {
+          output = `chown: cannot access '${args[1]}': No such file or directory`;
+        }
+      } else {
+        output = "chown: missing operand";
+      }
+      break;
+
+    case "chmod":
+      if (args.length > 1) {
+        const filePath = resolvePath(currentPath, args[1]);
+        const dir = navigatePath(fs, filePath.slice(0, -1)); // Navigate to the directory containing the file
+        const fileName = filePath[filePath.length - 1];
+
+        if (dir && dir.hasOwnProperty(fileName)) {
+          output = `chmod: changed permissions of '${fileName}'`;
+        } else {
+          output = `chmod: cannot access '${args[1]}': No such file or directory`;
+        }
+      } else {
+        output = "chmod: missing operand";
+      }
+      break;
+
     case "history":
       // Display only commands in the history, excluding any outputs
       output = history
@@ -311,9 +388,10 @@ export async function executeCommand(command, args, history = []) {
       let pathArg = currentPath;
 
       args.forEach((arg) => {
-        if (arg === "-a") {
+        if (arg === "-a" || arg === "-la" || arg === "-al") {
           showAll = true;
-        } else {
+        } else if (!arg.startsWith("-")) {
+          // Handle paths only
           pathArg = resolvePath(currentPath, arg);
         }
       });
@@ -332,7 +410,9 @@ export async function executeCommand(command, args, history = []) {
           })
           .join(" ");
       } else {
-        output = `ls: cannot access '${pathArg}': No such file or directory`;
+        output = `ls: cannot access '${
+          pathArg.join("/") || ""
+        }': No such file or directory`;
       }
       break;
 
@@ -459,8 +539,12 @@ export async function executeCommand(command, args, history = []) {
 
               if (matchingFiles.length > 0) {
                 matchingFiles.forEach((file) => {
-                  if (typeof dir[file] === "object" && !recursive) {
-                    output += `rm: cannot remove '${file}': Is a directory\n`;
+                  if (typeof dir[file] === "object") {
+                    if (recursive) {
+                      delete dir[file];
+                    } else {
+                      output += `rm: cannot remove '${file}': Is a directory\n`;
+                    }
                   } else {
                     delete dir[file];
                   }
@@ -758,14 +842,21 @@ export async function executeCommand(command, args, history = []) {
 
     case "grep":
       if (args.length > 1) {
-        const searchString = args[0];
-        const fileName = args[1];
-        const dir = navigatePath(fs, currentPath);
-        if (dir.hasOwnProperty(fileName) && typeof dir[fileName] === "string") {
-          const lines = dir[fileName].split("\n");
-          output = lines
-            .filter((line) => line.includes(searchString))
-            .join("\n");
+        const searchTerm = args[0].replace(/'/g, ""); // Remove single quotes if present
+        const filePath = resolvePath(currentPath, args[1]);
+        const dir = navigatePath(fs, filePath.slice(0, -1));
+        const fileName = filePath[filePath.length - 1];
+
+        if (dir && dir.hasOwnProperty(fileName)) {
+          if (typeof dir[fileName] === "string") {
+            const fileContents = dir[fileName].split("\n");
+            const matches = fileContents.filter((line) =>
+              line.includes(searchTerm)
+            );
+            output = matches.join("\n");
+          } else {
+            output = `grep: ${fileName}: Is a directory`;
+          }
         } else {
           output = `grep: ${fileName}: No such file or directory`;
         }
@@ -844,16 +935,24 @@ export async function executeCommand(command, args, history = []) {
       break;
 
     case "tail":
-      if (args[0]) {
-        const dir = navigatePath(fs, currentPath);
-        if (dir[args[0]] && typeof dir[args[0]] === "string") {
-          const lines = dir[args[0]].split("\n");
-          output = lines.slice(-10).join("\n");
+      if (args.length > 1 && args[0] === "-n") {
+        const numberOfLines = parseInt(args[1], 10);
+        const filePath = resolvePath(currentPath, args[2]);
+        const dir = navigatePath(fs, filePath.slice(0, -1));
+        const fileName = filePath[filePath.length - 1];
+
+        if (dir && dir.hasOwnProperty(fileName)) {
+          if (typeof dir[fileName] === "string") {
+            const fileContents = dir[fileName].split("\n");
+            output = fileContents.slice(-numberOfLines).join("\n");
+          } else {
+            output = `tail: ${fileName}: Is a directory`;
+          }
         } else {
-          output = `tail: cannot open '${args[0]}': No such file or directory`;
+          output = `tail: cannot open '${args[2]}': No such file or directory`;
         }
       } else {
-        output = "tail: missing operand";
+        output = "tail: invalid syntax or missing operand";
       }
       break;
 
@@ -1040,6 +1139,11 @@ export async function executeCommand(command, args, history = []) {
         output = `fdisk: ${args[0]}: Unable to open ${args[0]}`;
       }
       break;
+    case "mkfs.ext4":
+      // Inject "ext4" as the default filesystem type if not already specified
+      args.unshift("-t", "ext4");
+      // Fall through to the mkfs case
+      command = "mkfs";
 
     case "mkfs":
       let filesystemType = "ext4"; // default to ext4 if not specified
@@ -1127,18 +1231,20 @@ export async function executeCommand(command, args, history = []) {
       break;
 
     case "ln":
-      if (args.length === 2) {
-        output = `ln: created hard link '${args[1]}' to '${args[0]}'`;
-      } else {
-        output = `ln: missing operand after '${args[0]}'`;
-      }
-      break;
+      if (args.length === 3 && args[0] === "-s") {
+        const target = resolvePath(currentPath, args[1]);
+        const linkName = resolvePath(currentPath, args[2]);
+        const dir = navigatePath(fs, linkName.slice(0, -1));
+        const linkFileName = linkName[linkName.length - 1];
 
-    case "xargs":
-      if (args.length > 0) {
-        output = `xargs processed '${args.join(" ")}'`;
+        if (dir && dir.hasOwnProperty(linkFileName)) {
+          output = `ln: failed to create symbolic link '${linkFileName}': File exists`;
+        } else {
+          dir[linkFileName] = target;
+          output = "";
+        }
       } else {
-        output = "xargs: missing operand";
+        output = "ln: missing operand or invalid syntax";
       }
       break;
 
