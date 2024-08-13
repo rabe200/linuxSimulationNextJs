@@ -30,9 +30,10 @@ const TerminalInputContainer = styled.div`
 
 const Terminal2 = () => {
   const [history, setHistory] = useState([]);
-  const [commandHistory, setCommandHistory] = useState([]); // New state for command history
+  const [commandHistory, setCommandHistory] = useState([]); // Stores the history of commands
   const [input, setInput] = useState("");
   const [currentPath, setCurrentPath] = useState(["root", "home", "user"]);
+  const [historyIndex, setHistoryIndex] = useState(-1); // Track the position in the command history
   const terminalEndRef = useRef(null);
 
   useEffect(() => {
@@ -56,6 +57,7 @@ const Terminal2 = () => {
     }
     return resolvedPath;
   };
+
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
       const commandLine = input.trim(); // Capture the full command line input
@@ -63,8 +65,8 @@ const Terminal2 = () => {
 
       // Display the user's command in the terminal
       setHistory((prevHistory) => [
-        ...prevHistory,
-        `/${currentPath.join("/")}$ ${commandLine}`,
+        ...prevHistory, // Spread the previous history array
+        `/${currentPath.join("/")}$ ${commandLine}`, // Correctly using backticks for the template literal
       ]);
 
       // Add the command to the command history
@@ -81,13 +83,31 @@ const Terminal2 = () => {
         setHistory((prevHistory) => [...prevHistory, output]);
       }
 
-      // Handle special case for `cd` command to update the path
+      // Handle special case for cd command to update the path
       if (command === "cd" && output === "") {
         const newPath = resolvePath(currentPath, args[0]);
         setCurrentPath(newPath);
       }
 
       setInput(""); // Clear the input field
+      setHistoryIndex(-1); // Reset the history index
+    } else if (e.key === "ArrowUp") {
+      // Move up in the command history
+      if (historyIndex < commandHistory.length - 1) {
+        const newIndex = historyIndex + 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[commandHistory.length - 1 - newIndex]); // Display the command from history
+      }
+    } else if (e.key === "ArrowDown") {
+      // Move down in the command history
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[commandHistory.length - 1 - newIndex]); // Display the command from history
+      } else if (historyIndex === 0) {
+        setHistoryIndex(-1);
+        setInput(""); // Clear input when at the bottom of history
+      }
     }
   };
 
@@ -101,10 +121,11 @@ const Terminal2 = () => {
         <TerminalInput
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress} // Use onKeyDown instead of onKeyPress to capture Arrow keys
           autoFocus
         />
       </TerminalInputContainer>
+
       <div ref={terminalEndRef} />
     </TerminalContainer>
   );
