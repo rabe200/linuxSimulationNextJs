@@ -1,0 +1,582 @@
+{
+  "find": {
+    "description": "Search for files and directories within a directory hierarchy.",
+    "usage": "find [path] -name [pattern]",
+    "flags": {
+      "-name": "Search for files and directories with names matching the specified pattern."
+    },
+    "examples": ["find /home/user -name 'file.txt'"]
+  },
+  "tar": {
+    "description": "Create an archive of files.",
+    "usage": "tar -cvf [archive_name] [file_path]",
+    "flags": {
+      "-cvf": "Create a new archive with the specified name containing the specified files."
+    },
+    "examples": ["tar -cvf archive.tar /home/user/file.txt"]
+  },
+  "chown": {
+    "description": "Change file owner and group.",
+    "usage": "chown [user][:group] [file]",
+    "examples": ["chown user:group /home/user/file.txt"]
+  },
+  "chmod": {
+    "description": "Change file access permissions.",
+    "usage": "chmod [permissions] [file]",
+    "examples": ["chmod 755 /home/user/file.txt"]
+  },
+  "history": {
+    "description": "Display the list of previously executed commands in the session.",
+    "usage": "history",
+    "examples": ["history"]
+  },
+  "tree": {
+    "description": "List contents of directories in a tree-like format.",
+    "usage": "tree [-a] [path]",
+    "flags": {
+      "-a": "Show hidden files in the tree."
+    },
+    "examples": ["tree /home/user", "tree -a /home/user"]
+  },
+  "iptables": {
+    "description": "Configure the IP packet filter rules.",
+    "usage": "iptables -L",
+    "flags": {
+      "-L": "List all rules in the selected chain."
+    },
+    "examples": ["iptables -L"]
+  },
+  "dmesg": {
+    "description": "Print or control the kernel ring buffer.",
+    "usage": "dmesg",
+    "examples": ["dmesg | grep 'error'"]
+  },
+  "chkrootkit": {
+    "description": "Check the system for known rootkits.",
+    "usage": "chkrootkit",
+    "examples": ["chkrootkit"]
+  },
+  "sudo": {
+    "description": "Execute a command as another user.",
+    "usage": "sudo [command] [arguments]",
+    "examples": ["sudo ls /root"]
+  },
+  "apt": {
+    "description": "Advanced Package Tool (APT) for handling packages.",
+    "usage": "apt [update|install] [package]",
+    "flags": {
+      "install": "Install the specified package.",
+      "update": "Update the package index."
+    },
+    "examples": ["apt update", "apt install vim"]
+  },
+  "ufw": {
+    "description": "Uncomplicated Firewall, a frontend for iptables.",
+    "usage": "ufw status",
+    "flags": {
+      "status": "Show the current status of the firewall."
+    },
+    "examples": ["ufw status"]
+  },
+  "pwd": {
+    "description": "Print the current working directory.",
+    "usage": "pwd",
+    "examples": ["pwd"]
+  },
+  "ss": {
+    "description": "Utility to investigate sockets.",
+    "usage": "ss",
+    "examples": ["ss"]
+  },
+  "netstat": {
+    "description": "Network statistics tool.",
+    "usage": "netstat",
+    "examples": ["netstat"]
+  },
+  "ip": {
+    "description": "Show/manipulate routing, devices, policy routing and tunnels.",
+    "usage": "ip addr",
+    "flags": {
+      "addr": "Display all IP addresses on all interfaces."
+    },
+    "examples": ["ip addr"]
+  },
+  "ifconfig": {
+    "description": "Configure a network interface.",
+    "usage": "ifconfig",
+    "examples": ["ifconfig"]
+  },
+  "vim": {
+    "description": "A text editor.",
+    "usage": "vim [file]",
+    "examples": ["vim /home/user/file.txt"]
+  },
+  "ls": {
+    "description": "List directory contents.",
+    "usage": "ls [-a] [path]",
+    "flags": {
+      "-a": "Show all files including hidden files."
+    },
+    "examples": ["ls -a /root/home/user"]
+  },
+  "cd": {
+    "description": "Change the current directory.",
+    "usage": "cd [directory]",
+    "examples": ["cd /home/user"]
+  },
+  "mkdir": {
+    "description": "Create new directories.",
+    "usage": "mkdir [directory]",
+    "examples": ["mkdir /home/user/newdir"]
+  },
+  "touch": {
+    "description": "Create an empty file or update the timestamp of an existing file.",
+    "usage": "touch [file]",
+    "examples": ["touch /home/user/file.txt"]
+  },
+  "rm": {
+    "description": "Remove files or directories.",
+    "usage": "rm [-r] [file|directory]",
+    "flags": {
+      "-r": "Remove directories and their contents recursively."
+    },
+    "examples": ["rm -r /home/user/dir"]
+  },
+  "mv": {
+    "description": "Move or rename files and directories.",
+    "usage": "mv [source] [destination]",
+    "examples": ["mv /home/user/file.txt /home/user/newfile.txt"]
+  },
+  "cat": {
+    "description": "Concatenate and display file content.",
+    "usage": "cat [file]",
+    "examples": ["cat /home/user/file.txt"]
+  },
+  "echo": {
+    "description": "Display a line of text or write it to a file.",
+    "usage": "echo [text] > [file]",
+    "examples": ["echo 'Hello World' > /home/user/hello.txt"]
+  },
+  "cp": {
+    "description": "Copy files and directories.",
+    "usage": "cp [source] [destination]",
+    "examples": ["cp /home/user/file.txt /home/user/copy.txt"]
+  },
+  "ps": {
+    "description": "Report a snapshot of the current processes.",
+    "usage": "ps",
+    "examples": ["ps"]
+  },
+  "kill": {
+    "description": "Send a signal to a process to terminate it.",
+    "usage": "kill [PID]",
+    "examples": ["kill 1001"]
+  },
+  "top": {
+    "description": "Display Linux tasks and system resource usage.",
+    "usage": "top",
+    "examples": ["top"]
+  },
+  "htop": {
+    "description": "Interactive process viewer.",
+    "usage": "htop",
+    "examples": ["htop"]
+  },
+  "date": {
+    "description": "Display or set the system date and time.",
+    "usage": "date",
+    "examples": ["date"]
+  },
+  "whoami": {
+    "description": "Print the effective user ID.",
+    "usage": "whoami",
+    "examples": ["whoami"]
+  },
+  "hostname": {
+    "description": "Show or set the system's hostname.",
+    "usage": "hostname",
+    "examples": ["hostname"]
+  },
+  "uname": {
+    "description": "Print system information.",
+    "usage": "uname [-a]",
+    "flags": {
+      "-a": "Print all system information."
+    },
+    "examples": ["uname -a"]
+  },
+  "uptime": {
+    "description": "Tell how long the system has been running.",
+    "usage": "uptime",
+    "examples": ["uptime"]
+  },
+  "cal": {
+    "description": "Display a calendar.",
+    "usage": "cal",
+    "examples": ["cal"]
+  },
+  "bc": {
+    "description": "An arbitrary precision calculator language.",
+    "usage": "bc",
+    "examples": ["bc"]
+  },
+  "df": {
+    "description": "Report file system disk space usage.",
+    "usage": "df [-h|-i]",
+    "flags": {
+      "-h": "Display sizes in human-readable format.",
+      "-i": "Display inode information instead of block usage."
+    },
+    "examples": ["df -h", "df -i"]
+  },
+  "du": {
+    "description": "Estimate file space usage.",
+    "usage": "du",
+    "examples": ["du /home/user"]
+  },
+  "free": {
+    "description": "Display the amount of free and used memory in the system.",
+    "usage": "free",
+    "examples": ["free"]
+  },
+  "id": {
+    "description": "Print user and group information for the specified user.",
+    "usage": "id",
+    "examples": ["id"]
+  },
+  "who": {
+    "description": "Show who is logged on.",
+    "usage": "who",
+    "examples": ["who"]
+  },
+  "w": {
+    "description": "Show who is logged on and what they are doing.",
+    "usage": "w",
+    "examples": ["w"]
+  },
+  "last": {
+    "description": "Show a listing of last logged in users.",
+    "usage": "last",
+    "examples": ["last"]
+  },
+  "grep": {
+    "description": "Search text using patterns.",
+    "usage": "grep [pattern] [file]",
+    "examples": ["grep 'search_term' /home/user/file.txt"]
+  },
+  "which": {
+    "description": "Locate a command.",
+    "usage": "which [command]",
+    "examples": ["which ls"]
+  },
+  "locate": {
+    "description": "Find files by name.",
+    "usage": "locate [name]",
+    "examples": ["locate file.txt"]
+  },
+  "diff": {
+    "description": "Compare files line by line.",
+    "usage": "diff [file1] [file2]",
+    "examples": ["diff file1.txt file2.txt"]
+  },
+  "sort": {
+    "description": "Sort lines of text files.",
+    "usage": "sort [file]",
+    "examples": ["sort file.txt"]
+  },
+  "uniq": {
+    "description": "Report or omit repeated lines.",
+    "usage": "uniq [file]",
+    "examples": ["uniq file.txt"]
+  },
+  "head": {
+    "description": "Output the first part of files.",
+    "usage": "head [file]",
+    "examples": ["head file.txt"]
+  },
+  "tail": {
+    "description": "Output the last part of files.",
+    "usage": "tail -n [number_of_lines] [file]",
+    "flags": {
+      "-n": "Specify the number of lines to show from the end of the file."
+    },
+    "examples": ["tail -n 10 file.txt"]
+  },
+  "wc": {
+    "description": "Print newline, word, and byte counts for each file.",
+    "usage": "wc [file]",
+    "examples": ["wc file.txt"]
+  },
+  "tee": {
+    "description": "Read from standard input and write to standard output and files.",
+    "usage": "tee [file]",
+    "examples": ["echo 'data' | tee file.txt"]
+  },
+  "awk": {
+    "description": "Pattern scanning and processing language.",
+    "usage": "awk [pattern] [file]",
+    "examples": ["awk 'pattern' file.txt"]
+  },
+  "sed": {
+    "description": "Stream editor for filtering and transforming text.",
+    "usage": "sed [search_pattern] [replacement] [file]",
+    "examples": ["sed 's/old/new/g' file.txt"]
+  },
+  "cut": {
+    "description": "Remove sections from each line of files.",
+    "usage": "cut -d [delimiter] -f [field] [file]",
+    "flags": {
+      "-d": "Specify the delimiter.",
+      "-f": "Specify the field to extract."
+    },
+    "examples": ["cut -d: -f1 /etc/passwd"]
+  },
+  "tr": {
+    "description": "Translate or delete characters.",
+    "usage": "tr [source] [replacement]",
+    "examples": ["tr 'a' 'b' < file.txt"]
+  },
+  "stat": {
+    "description": "Display file or file system status.",
+    "usage": "stat [file]",
+    "examples": ["stat file.txt"]
+  },
+  "file": {
+    "description": "Determine file type.",
+    "usage": "file [file]",
+    "examples": ["file file.txt"]
+  },
+  "lsblk": {
+    "description": "List information about block devices.",
+    "usage": "lsblk [-f]",
+    "flags": {
+      "-f": "Display file system type information."
+    },
+    "examples": ["lsblk -f"]
+  },
+  "parted": {
+    "description": "A partition manipulation program.",
+    "usage": "parted [-l]",
+    "flags": {
+      "-l": "List the partitions."
+    },
+    "examples": ["parted -l"]
+  },
+  "fdisk": {
+    "description": "Partition table manipulator for Linux.",
+    "usage": "fdisk [-l]",
+    "flags": {
+      "-l": "List the partition tables."
+    },
+    "examples": ["fdisk -l"]
+  },
+  "mkfs.ext4": {
+    "description": "Create an ext4 file system.",
+    "usage": "mkfs.ext4 [device]",
+    "examples": ["mkfs.ext4 /dev/sda1"]
+  },
+  "mkfs": {
+    "description": "Build a Linux file system.",
+    "usage": "mkfs -t [fs_type] [device]",
+    "flags": {
+      "-t": "Specify the file system type."
+    },
+    "examples": ["mkfs -t ext4 /dev/sda1"]
+  },
+  "fsck": {
+    "description": "File system consistency check and repair.",
+    "usage": "fsck [file_system]",
+    "examples": ["fsck /dev/sda1"]
+  },
+  "umount": {
+    "description": "Unmount file systems.",
+    "usage": "umount [file_system]",
+    "examples": ["umount /dev/sda1"]
+  },
+  "mount": {
+    "description": "Mount a file system.",
+    "usage": "mount [device] [mount_point] [type]",
+    "examples": ["mount /dev/sda1 /mnt ext4"]
+  },
+  "modprobe": {
+    "description": "Add and remove modules from the Linux kernel.",
+    "usage": "modprobe [-r] [module]",
+    "flags": {
+      "-r": "Remove the module instead of adding it."
+    },
+    "examples": ["modprobe -r module_name"]
+  },
+  "lsmod": {
+    "description": "Show the status of modules in the Linux kernel.",
+    "usage": "lsmod",
+    "examples": ["lsmod"]
+  },
+  "ln": {
+    "description": "Create a link to a file.",
+    "usage": "ln [-s] [target] [link_name]",
+    "flags": {
+      "-s": "Create a symbolic link."
+    },
+    "examples": ["ln -s /home/user/file.txt /home/user/link.txt"]
+  },
+  "jobs": {
+    "description": "List the jobs running in the background.",
+    "usage": "jobs",
+    "examples": ["jobs"]
+  },
+  "bg": {
+    "description": "Resume a job in the background.",
+    "usage": "bg [job_id]",
+    "examples": ["bg 1"]
+  },
+  "fg": {
+    "description": "Resume a job in the foreground.",
+    "usage": "fg [job_id]",
+    "examples": ["fg 1"]
+  },
+  "pkill": {
+    "description": "Kill processes by name.",
+    "usage": "pkill [process_name]",
+    "examples": ["pkill vim"]
+  },
+  "nohup": {
+    "description": "Run a command immune to hangups.",
+    "usage": "nohup [command]",
+    "examples": ["nohup long_running_command &"]
+  },
+  "shutdown": {
+    "description": "Bring the system down in a safe way.",
+    "usage": "shutdown",
+    "examples": ["shutdown now"]
+  },
+  "reboot": {
+    "description": "Reboot the system.",
+    "usage": "reboot",
+    "examples": ["reboot"]
+  },
+  "halt": {
+    "description": "Halt the system.",
+    "usage": "halt",
+    "examples": ["halt"]
+  },
+  "sync": {
+    "description": "Synchronize cached writes to persistent storage.",
+    "usage": "sync",
+    "examples": ["sync"]
+  },
+  "gzip": {
+    "description": "Compress files.",
+    "usage": "gzip [file]",
+    "examples": ["gzip file.txt"]
+  },
+  "gunzip": {
+    "description": "Decompress .gz files.",
+    "usage": "gunzip [file]",
+    "examples": ["gunzip file.txt.gz"]
+  },
+  "zip": {
+    "description": "Package and compress files.",
+    "usage": "zip [archive_name] [files...]",
+    "examples": ["zip archive.zip file1.txt file2.txt"]
+  },
+  "unzip": {
+    "description": "Unpack .zip archives.",
+    "usage": "unzip [file]",
+    "examples": ["unzip archive.zip"]
+  },
+  "scp": {
+    "description": "Securely copy files between hosts.",
+    "usage": "scp [source] [destination]",
+    "examples": ["scp file.txt user@remote:/path"]
+  },
+  "wget": {
+    "description": "Retrieve files from the web.",
+    "usage": "wget [URL]",
+    "examples": ["wget http://example.com/file.txt"]
+  },
+  "curl": {
+    "description": "Transfer data from or to a server using various protocols.",
+    "usage": "curl [URL]",
+    "examples": ["curl http://example.com"]
+  },
+  "ping": {
+    "description": "Send ICMP ECHO_REQUEST to network hosts.",
+    "usage": "ping [host]",
+    "examples": ["ping example.com"]
+  },
+  "traceroute": {
+    "description": "Print the route packets take to the network host.",
+    "usage": "traceroute [host]",
+    "examples": ["traceroute example.com"]
+  },
+  "nslookup": {
+    "description": "Query Internet name servers interactively.",
+    "usage": "nslookup [domain]",
+    "examples": ["nslookup example.com"]
+  },
+  "ftp": {
+    "description": "File Transfer Protocol client.",
+    "usage": "ftp [host]",
+    "examples": ["ftp example.com"]
+  },
+  "sftp": {
+    "description": "Secure File Transfer Protocol client.",
+    "usage": "sftp [host]",
+    "examples": ["sftp example.com"]
+  },
+  "telnet": {
+    "description": "User interface to the TELNET protocol.",
+    "usage": "telnet [host]",
+    "examples": ["telnet example.com"]
+  },
+  "ssh": {
+    "description": "OpenSSH client (remote login program).",
+    "usage": "ssh [host]",
+    "examples": ["ssh user@example.com"]
+  },
+  "exit": {
+    "description": "Exit the shell.",
+    "usage": "exit",
+    "examples": ["exit"]
+  },
+  "dig": {
+    "description": "DNS lookup utility.",
+    "usage": "dig [domain]",
+    "examples": ["dig example.com"]
+  },
+  "killall": {
+    "description": "Kill processes by name.",
+    "usage": "killall [process_name]",
+    "examples": ["killall vim"]
+  },
+  "watch": {
+    "description": "Execute a program periodically, showing output fullscreen.",
+    "usage": "watch [command]",
+    "examples": ["watch uptime"]
+  },
+  "hostnamectl": {
+    "description": "Control the system hostname.",
+    "usage": "hostnamectl",
+    "examples": ["hostnamectl"]
+  },
+  "journalctl": {
+    "description": "Query the systemd journal.",
+    "usage": "journalctl",
+    "examples": ["journalctl"]
+  },
+  "systemctl": {
+    "description": "Control the systemd system and service manager.",
+    "usage": "systemctl",
+    "examples": ["systemctl status"]
+  },
+  "timedatectl": {
+    "description": "Control the system time and date.",
+    "usage": "timedatectl",
+    "examples": ["timedatectl"]
+  },
+  "hwclock": {
+    "description": "Query or set the hardware clock (RTC).",
+    "usage": "hwclock",
+    "examples": ["hwclock"]
+  }
+}

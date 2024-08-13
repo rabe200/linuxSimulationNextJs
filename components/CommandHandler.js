@@ -1,5 +1,5 @@
 import fs from "./FileSystem.json";
-
+import manuals from "./manuals.json";
 // Initialize a set of common processes with PIDs
 let processes = {
   1001: { command: "bash", user: "user", status: "running" },
@@ -106,6 +106,35 @@ export async function executeCommand(command, args, history = []) {
     /////////////////////
     /// "CASES" /////////
     /////////////////////
+
+    case "man":
+      if (args.length === 1) {
+        const manCommand = args[0];
+        if (manuals[manCommand]) {
+          const { description, usage, examples, flags } = manuals[manCommand];
+          output += `\nMANUAL PAGE FOR: ${manCommand.toUpperCase()}\n\n`;
+          output += `DESCRIPTION:\n${description}\n\n`;
+          output += `USAGE:\n${usage}\n\n`;
+
+          if (flags) {
+            output += "FLAGS:\n";
+            Object.keys(flags).forEach((flag) => {
+              output += `  ${flag}: ${flags[flag]}\n`;
+            });
+            output += "\n";
+          }
+
+          output += "EXAMPLES:\n";
+          examples.forEach((example) => {
+            output += `  ${example}\n`;
+          });
+        } else {
+          output = `man: no manual entry for ${manCommand}`;
+        }
+      } else {
+        output = "man: missing operand";
+      }
+      break;
 
     case "find":
       if (args.length > 2 && args[1] === "-name") {
