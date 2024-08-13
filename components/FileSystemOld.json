@@ -1,0 +1,134 @@
+{
+  "root": {
+    "bin": {
+      "bash": "",
+      "ls": "",
+      "cat": "",
+      "echo": "",
+      "cp": "",
+      "mv": "",
+      "rm": "",
+      "touch": "",
+      "mkdir": "",
+      "grep": "",
+      "find": "",
+      "ping": "",
+      "tar": "",
+      "gzip": "",
+      "gunzip": "",
+      "zip": "",
+      "unzip": "",
+      "ssh": "",
+      "scp": "",
+      "curl": "",
+      "wget": "",
+      "sudo": "",
+      "apt": ""
+    },
+    "boot": {
+      "vmlinuz": "",
+      "initrd.img": ""
+    },
+    "dev": {
+      "sda1": "",
+      "sdb1": "",
+      "tty0": "",
+      "null": "",
+      "random": "",
+      "urandom": ""
+    },
+    "etc": {
+      "passwd": "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash",
+      "shadow": "root:!:18738:0:99999:7:::\nuser:!:18738:0:99999:7:::",
+      "group": "root:x:0:\nuser:x:1000:",
+      "hosts": "127.0.0.1   localhost\n::1         localhost ip6-localhost ip6-loopback",
+      "hostname": "localhost",
+      "network": {
+        "interfaces": "auto lo\niface lo inet loopback\n"
+      },
+      "apt": {
+        "sources.list": "deb http://deb.debian.org/debian/ stable main contrib non-free\n"
+      },
+      "ssh": {
+        "sshd_config": "PermitRootLogin yes\nPasswordAuthentication yes"
+      }
+    },
+    "home": {
+      "user": {
+        "Documents": {},
+        "Downloads": {},
+        "Music": {},
+        "Pictures": {},
+        "Videos": {},
+        "Projects": {
+          "nextjs-app": {
+            "package.json": "{\n  \"name\": \"nextjs-app\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\"\n  }\n}",
+            "pages": {
+              "index.js": "export default function Home() { return <h1>Hello World</h1> }",
+              "_app.js": "import '../styles/globals.css'; function MyApp({ Component, pageProps }) { return <Component {...pageProps} /> } export default MyApp;"
+            },
+            "public": {
+              "favicon.ico": ""
+            },
+            "styles": {
+              "globals.css": "body { margin: 0; padding: 0; font-family: Arial, sans-serif; }"
+            },
+            "node_modules": {},
+            "next.config.js": "module.exports = { reactStrictMode: true }",
+            ".gitignore": "node_modules\n.next\nout\n",
+            "README.md": "# Next.js Project"
+          }
+        }
+      }
+    },
+    "lib": {
+      "systemd": {
+        "system": {
+          "sshd.service": "[Unit]\nDescription=OpenSSH server daemon\n\n[Service]\nExecStart=/usr/sbin/sshd -D\n\n[Install]\nWantedBy=multi-user.target"
+        }
+      }
+    },
+    "mnt": {},
+    "proc": {
+      "1": {
+        "cmdline": "/sbin/init"
+      },
+      "self": {}
+    },
+    "root": {},
+    "sbin": {
+      "reboot": "",
+      "shutdown": "",
+      "halt": "",
+      "ifconfig": ""
+    },
+    "tmp": {},
+    "usr": {
+      "bin": {
+        "vim": "",
+        "htop": "",
+        "node": "",
+        "npm": "",
+        "python3": "",
+        "pip3": "",
+        "docker": ""
+      },
+      "lib": {},
+      "local": {
+        "bin": {}
+      },
+      "share": {
+        "man": {}
+      }
+    },
+    "var": {
+      "log": {
+        "auth.log": "",
+        "syslog": ""
+      },
+      "www": {
+        "html": {}
+      }
+    }
+  }
+}

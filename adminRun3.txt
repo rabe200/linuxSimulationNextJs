@@ -1,0 +1,149 @@
+Command: whoami
+Output: user
+
+Command: hostnamectl
+Output:    Static hostname: localhost
+         Icon name: computer-laptop
+           Chassis: laptop
+        Machine ID: 1234567890abcdef1234567890abcdef
+           Boot ID: 1234567890abcdef1234567890abcdef
+Operating System: Linux
+            Kernel: Linux 5.4.0-52-generic
+
+Command: uptime
+Output: up 2 hours, 0 minutes, 1 user, load average: 0.00, 0.01, 0.05
+
+Command: df -h
+Output: Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       100G   50G   50G  50% /
+tmpfs           3.9G   1M  3.9G   1% /run
+udev            3.9G   0    3.9G   0% /dev
+/dev/sdb1       40G   10G   30G  25% /home
+
+
+Command: free -m
+Output:               total        used        free      shared  buff/cache   available
+Mem:        16384000    8192000     4096000      204800     2048000     12288000
+Swap:        8192000     2048000     6144000
+
+
+Command: ps aux --sort=-%mem | head -n 10
+Output:   PID TTY          TIME CMD
+1001 pts/0    00:00:00 bash
+1002 pts/0    00:00:00 ssh
+1003 pts/0    00:00:00 vim
+1004 pts/0    00:00:00 node
+1005 pts/0    00:00:00 npm
+1006 pts/0    00:00:00 htop
+
+
+Command: top -b -n 1 | head -n 20
+Output: top - 00:00:00 up 2 hours, 0 minutes,  1 user,  load average: 0.45, 0.38, 0.39
+Tasks: 100 total,   1 running,  99 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.3 us,  0.2 sy,  0.0 ni, 99.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  16000.0 total,   8000.0 free,   4096.0 used,   2904.0 buff/cache
+MiB Swap:  8000.0 total,   6000.0 free,   1000.0 used,   1000.0 avail Mem
+
+Command: netstat -tuln
+Output: Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 192.168.1.100:22        192.168.1.101:5566       ESTABLISHED
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN
+tcp6       0      0 ::1:631                 :::*                    LISTEN
+udp        0      0 0.0.0.0:68              0.0.0.0:*               
+udp        0      0 192.168.1.100:123       0.0.0.0:*               
+udp6       0      0 ::1:123                 :::*                    
+
+
+Command: ss -tulnp
+Output: Netid  State      Recv-Q Send-Q       Local Address:Port          Peer Address:Port 
+tcp    ESTAB      0      0            192.168.1.100:ssh           192.168.1.101:5566
+tcp    LISTEN     0      128          127.0.0.1:ipp               0.0.0.0:*        
+tcp    LISTEN     0      128          [::1]:ipp                   [::]:*           
+udp    UNCONN     0      0            0.0.0.0:bootpc              0.0.0.0:*        
+
+
+Command: iptables -L
+Output: Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+ACCEPT     all  --  anywhere             anywhere            
+DROP       all  --  192.168.0.0/24       anywhere            
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination         
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+
+Command: lsmod
+Output: Module                  Size  Used by
+ext4                   741376  1
+mbcache                 16384  2 ext4
+jbd2                   106496  1 ext4
+evdev                   24576  16
+serio_raw               16384  0
+psmouse               147456  0
+
+
+Command: systemctl --failed
+Output: UNIT                        LOAD   ACTIVE SUB     DESCRIPTION
+proc-sys-fs-binfmt_misc.automount loaded active waiting  Arbitrary Executable File Formats File System Automount Point
+sys-devices-virtual-net-docker0.device loaded active plugged  /sys/devices/virtual/net/docker0
+
+Command: journalctl -p 3 -xb
+Output: 2024-08-13T09:19:27.654Z localhost systemd[1]: Log entry 1
+2024-08-13T09:20:27.654Z localhost systemd[1]: Log entry 2
+2024-08-13T09:21:27.654Z localhost systemd[1]: Log entry 3
+2024-08-13T09:22:27.654Z localhost systemd[1]: Log entry 4
+2024-08-13T09:23:27.654Z localhost systemd[1]: Log entry 5
+2024-08-13T09:24:27.654Z localhost systemd[1]: Log entry 6
+2024-08-13T09:25:27.654Z localhost systemd[1]: Log entry 7
+2024-08-13T09:26:27.654Z localhost systemd[1]: Log entry 8
+2024-08-13T09:27:27.654Z localhost systemd[1]: Log entry 9
+2024-08-13T09:28:27.654Z localhost systemd[1]: Log entry 10
+
+Command: dmesg | grep -i error
+Output: Hardware Error: CPU 1: Machine Check Exception: 0000000000000000 Bank 4: b200000000070f0f
+Hardware Error: CPU 2: Machine Check Exception: 0000000000000000 Bank 4: b200000000070f0f
+
+
+Command: cat /etc/passwd | grep '/bin/bash'
+Output: cat: /etc/passwd: No such file or directory
+
+Command: chkrootkit
+Output: ROOTKIT DETECTED: Possible LKM Trojan installed
+Searching for /proc/... ... nothing found
+Searching for LKM... ... nothing found
+
+
+Command: sudo apt update
+Output: Get:1 http://deb.debian.org/debian stable InRelease [116 kB]
+Get:2 http://deb.debian.org/debian stable/main Sources [5,300 kB]
+Get:3 http://deb.debian.org/debian stable/main amd64 Packages [10,000 kB]
+Fetched 15,416 kB in 3s (5,138 kB/s)
+Reading package lists... Done
+
+Command: sudo apt upgrade -y
+Output: Reading package lists... Done
+Building dependency tree... Done
+Calculating upgrade... Done
+The following packages will be upgraded:
+  package1 package2 package3
+3 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+Need to get 5,000 kB of archives.
+After this operation, 1 MB of additional disk space will be used.
+Fetched 5,000 kB in 2s (2,500 kB/s)
+Setting up package1 (1.0-1) ...
+Setting up package2 (1.0-1) ...
+Setting up package3 (1.0-1) ...
+
+Command: sudo ufw status
+Output: Status: active
+To                         Action      From
+--                         ------      ----
+22                         ALLOW       Anywhere
+80                         ALLOW       Anywhere
+443                        ALLOW       Anywhere
+
+
+Command: last -x | head -n 10
+Output: user    pts/0        :0               Fri Aug  1 00:00   still logged in
