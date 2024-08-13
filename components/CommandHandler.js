@@ -34,15 +34,19 @@ function resolvePath(cwd, path = "") {
   for (const part of newPath) {
     if (part === "..") {
       resolvedPath.pop();
-    } else if (part !== ".") {
+    } else if (part !== "." && part !== "") {
       resolvedPath.push(part);
     }
   }
+
+  console.log("Resolved Path:", resolvedPath); // Log the resolved path
+
   return resolvedPath;
 }
 
 function navigatePath(fileSystem, path) {
-  return path.reduce((dir, part) => {
+  console.log("Navigating to Path:", path); // Log the path being navigated
+  const result = path.reduce((dir, part) => {
     if (dir && typeof dir === "object") {
       const lowercasedPart = part.toLowerCase();
       const foundKey = Object.keys(dir).find(
@@ -52,6 +56,10 @@ function navigatePath(fileSystem, path) {
     }
     return undefined;
   }, fileSystem);
+
+  console.log("Navigation Result:", result); // Log the result of navigation
+
+  return result;
 }
 
 function matchFilesWithWildcard(dir, pattern) {
@@ -63,13 +71,53 @@ function simulateNetworkLatency() {
   return new Promise((resolve) => setTimeout(resolve, Math.random() * 2000));
 }
 
+function buildTree(dir, indent = "", isLast = true) {
+  let treeOutput = "";
+  const keys = Object.keys(dir);
+
+  keys.forEach((key, index) => {
+    const isDirectory = typeof dir[key] === "object";
+    const isLastEntry = index === keys.length - 1;
+
+    // Proper prefix for the tree structure
+    const prefix = isLastEntry ? "└── " : "├── ";
+
+    // Add the current entry to the output
+    treeOutput += `${indent}${prefix}${key}\n`;
+
+    // Recursively build the tree for directories
+    if (isDirectory) {
+      const newIndent = indent + (isLastEntry ? "    " : "│   ");
+      treeOutput += buildTree(dir[key], newIndent, isLastEntry);
+    }
+  });
+  return treeOutput;
+}
+
 export async function executeCommand(command, args, history = []) {
+  console.log("Executing Command:", command, args); // Log command and arguments
+
   let output = "";
   const uptimeSeconds = Math.floor(
     (new Date().getTime() - systemStartTime.getTime()) / 1000
   );
 
   switch (command) {
+    case "tree":
+      const startPath = args[0]
+        ? resolvePath(currentPath, args[0])
+        : currentPath;
+      const dir = navigatePath(fs, startPath);
+
+      if (dir && typeof dir === "object") {
+        output = buildTree(dir);
+      } else {
+        output = `tree: cannot access '${
+          args[0] || ""
+        }': No such file or directory`;
+      }
+      break;
+
     case "iptables":
       if (args[0] === "-L") {
         output =
@@ -232,7 +280,11 @@ export async function executeCommand(command, args, history = []) {
         }
       });
 
+      console.log("Path Argument after resolve:", pathArg); // Log the resolved path
+
       const targetDir = navigatePath(fs, pathArg);
+
+      console.log("Target Directory for ls:", targetDir); // Log the directory being listed
 
       if (targetDir && typeof targetDir === "object") {
         output = Object.keys(targetDir)
@@ -249,6 +301,9 @@ export async function executeCommand(command, args, history = []) {
     case "cd":
       if (args[0]) {
         const newPath = resolvePath(currentPath, args[0]);
+
+        console.log("New Path after cd:", newPath); // Log the path to navigate to
+
         if (navigatePath(fs, newPath)) {
           currentPath = newPath;
           output = "";
@@ -371,6 +426,9 @@ export async function executeCommand(command, args, history = []) {
     case "cat":
       if (args[0]) {
         const dir = navigatePath(fs, currentPath);
+
+        console.log("Directory for cat:", dir); // Log the current directory
+
         if (dir.hasOwnProperty(args[0])) {
           if (typeof dir[args[0]] === "string") {
             output = dir[args[0]];

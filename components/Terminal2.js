@@ -10,6 +10,7 @@ const TerminalContainer = styled.div`
   padding: 10px;
   font-family: monospace;
   overflow-y: auto;
+  white-space: pre; /* Ensures white space and line breaks are respected */
 `;
 
 const TerminalInput = styled.input`
@@ -30,7 +31,7 @@ const TerminalInputContainer = styled.div`
 const Terminal2 = () => {
   const [history, setHistory] = useState([]);
   const [input, setInput] = useState("");
-  const [currentPath, setCurrentPath] = useState(["root", "home", "user"]); // Initial path as an array
+  const [currentPath, setCurrentPath] = useState(["root", "home", "user"]);
   const terminalEndRef = useRef(null);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const Terminal2 = () => {
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
       const [command, ...args] = input.split(" ");
-      const output = await executeCommand(command, args, history); // Await the async function
+      const output = await executeCommand(command, args, history);
       setHistory([...history, `/${currentPath.join("/")}$ ${input}`, output]);
 
       // Update the current path if the command was `cd`
