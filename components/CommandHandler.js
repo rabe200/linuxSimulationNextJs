@@ -1,5 +1,6 @@
 import fs from "./FileSystem.json";
 import manuals from "./manuals.json";
+
 // Initialize a set of common processes with PIDs
 let processes = {
   1001: { command: "bash", user: "user", status: "running" },
@@ -94,7 +95,12 @@ function buildTree(dir, prefix = "", showHidden = false) {
   return output;
 }
 
-export async function executeCommand(command, args, history = []) {
+export async function executeCommand(
+  command,
+  args,
+  commandHistory = [],
+  history = []
+) {
   console.log("Executing Command:", command, args); // Log command and arguments
 
   let output = "";
@@ -106,7 +112,17 @@ export async function executeCommand(command, args, history = []) {
     /////////////////////
     /// "CASES" /////////
     /////////////////////
-
+    case "compgen":
+      if (args.length === 1) {
+        if (args[0] === "-c") {
+          output = Object.keys(manuals).sort().join("\n");
+        } else {
+          output = `compgen: invalid option -- '${args[0]}'`;
+        }
+      } else {
+        output = "compgen: missing operand";
+      }
+      break;
     case "man":
       if (args.length === 1) {
         const manCommand = args[0];
@@ -214,11 +230,8 @@ export async function executeCommand(command, args, history = []) {
       break;
 
     case "history":
-      // Display only commands in the history, excluding any outputs
-      output = history
-        .filter((entry) => !entry.startsWith("\n") && !entry.includes("output")) // Filter out responses or outputs
-        .map((entry, index) => `${index + 1}  ${entry}`) // Number the commands
-        .join("\n");
+      // Simply return the list of commands from commandHistory without any filtering
+      output = commandHistory.join("\n");
       break;
 
     case "tree":

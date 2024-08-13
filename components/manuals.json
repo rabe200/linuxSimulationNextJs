@@ -1,4 +1,12 @@
 {
+  "compgen": {
+    "description": "Generate possible completion matches for the specified criteria.",
+    "usage": "compgen [-c]",
+    "flags": {
+      "-c": "List all commands (cases) available."
+    },
+    "examples": ["compgen -c"]
+  },
   "find": {
     "description": "Search for files and directories within a directory hierarchy.",
     "usage": "find [path] -name [pattern]",

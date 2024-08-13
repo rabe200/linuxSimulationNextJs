@@ -30,6 +30,7 @@ const TerminalInputContainer = styled.div`
 
 const Terminal2 = () => {
   const [history, setHistory] = useState([]);
+  const [commandHistory, setCommandHistory] = useState([]); // New state for command history
   const [input, setInput] = useState("");
   const [currentPath, setCurrentPath] = useState(["root", "home", "user"]);
   const terminalEndRef = useRef(null);
@@ -55,7 +56,6 @@ const Terminal2 = () => {
     }
     return resolvedPath;
   };
-
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
       const commandLine = input.trim(); // Capture the full command line input
@@ -67,8 +67,14 @@ const Terminal2 = () => {
         `/${currentPath.join("/")}$ ${commandLine}`,
       ]);
 
-      // Execute the command
-      const output = await executeCommand(command, args, history);
+      // Add the command to the command history
+      setCommandHistory((prevCommandHistory) => [
+        ...prevCommandHistory,
+        commandLine,
+      ]);
+
+      // Execute the command and pass commandHistory to it
+      const output = await executeCommand(command, args, commandHistory);
 
       // Display the output in the terminal, if any
       if (output) {
