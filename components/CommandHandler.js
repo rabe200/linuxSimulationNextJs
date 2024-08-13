@@ -71,27 +71,27 @@ function simulateNetworkLatency() {
   return new Promise((resolve) => setTimeout(resolve, Math.random() * 2000));
 }
 
-function buildTree(dir, indent = "", isLast = true) {
-  let treeOutput = "";
-  const keys = Object.keys(dir);
+function buildTree(dir, prefix = "", showHidden = false) {
+  let output = "";
+  // Filter entries based on whether we want to show hidden files or not
+  const entries = Object.keys(dir).filter(
+    (entry) => showHidden || !entry.startsWith(".")
+  );
 
-  keys.forEach((key, index) => {
-    const isDirectory = typeof dir[key] === "object";
-    const isLastEntry = index === keys.length - 1;
+  entries.forEach((entry, index) => {
+    const isLast = index === entries.length - 1;
+    const connector = isLast ? "└── " : "├── ";
+    const nextPrefix = prefix + (isLast ? "    " : "│   ");
 
-    // Proper prefix for the tree structure
-    const prefix = isLastEntry ? "└── " : "├── ";
-
-    // Add the current entry to the output
-    treeOutput += `${indent}${prefix}${key}\n`;
-
-    // Recursively build the tree for directories
-    if (isDirectory) {
-      const newIndent = indent + (isLastEntry ? "    " : "│   ");
-      treeOutput += buildTree(dir[key], newIndent, isLastEntry);
+    if (typeof dir[entry] === "object") {
+      output += `${prefix}${connector}${entry}\n`;
+      output += buildTree(dir[entry], nextPrefix, showHidden);
+    } else {
+      output += `${prefix}${connector}${entry}\n`;
     }
   });
-  return treeOutput;
+
+  return output;
 }
 
 export async function executeCommand(command, args, history = []) {
@@ -103,20 +103,58 @@ export async function executeCommand(command, args, history = []) {
   );
 
   switch (command) {
+    /////////////////////
+    /// "CASES" /////////
+    /////////////////////
+
+    case "history":
+      // Display only commands in the history, excluding any outputs
+      output = history
+        .filter((entry) => !entry.startsWith("\n") && !entry.includes("output")) // Filter out responses or outputs
+        .map((entry, index) => `${index + 1}  ${entry}`) // Number the commands
+        .join("\n");
+      break;
+
     case "tree":
-      const startPath = args[0]
-        ? resolvePath(currentPath, args[0])
+      const showHidden = args.includes("-a");
+      const startPath = args.find((arg) => arg !== "-a")
+        ? resolvePath(
+            currentPath,
+            args.find((arg) => arg !== "-a")
+          )
         : currentPath;
       const dir = navigatePath(fs, startPath);
 
       if (dir && typeof dir === "object") {
-        output = buildTree(dir);
+        output = buildTree(dir, "", showHidden);
       } else {
         output = `tree: cannot access '${
-          args[0] || ""
+          args.find((arg) => arg !== "-a") || ""
         }': No such file or directory`;
       }
       break;
+
+      function buildTreeIncludingHidden(dir, prefix = "") {
+        let output = "";
+        const entries = Object.keys(dir).filter(
+          (entry) => entry.startsWith(".") || entry
+        );
+
+        entries.forEach((entry, index) => {
+          const isLast = index === entries.length - 1;
+          const connector = isLast ? "└── " : "├── ";
+          const nextPrefix = prefix + (isLast ? "    " : "│   ");
+
+          if (typeof dir[entry] === "object") {
+            output += `${prefix}${connector}${entry}\n`;
+            output += buildTreeIncludingHidden(dir[entry], nextPrefix);
+          } else {
+            output += `${prefix}${connector}${entry}\n`;
+          }
+        });
+
+        return output;
+      }
 
     case "iptables":
       if (args[0] === "-L") {
@@ -331,15 +369,57 @@ export async function executeCommand(command, args, history = []) {
 
     case "touch":
       if (args.length > 0) {
-        const dir = navigatePath(fs, currentPath);
         let outputMessages = [];
 
-        args.forEach((filename) => {
-          if (dir.hasOwnProperty(filename)) {
-            outputMessages.push(`touch: '${filename}' exists`);
+        args.forEach((filePath) => {
+          // Check for brace expansion pattern (e.g., file{1..3}.txt)
+          const bracePattern = /^(.*)\{(\d+)\.\.(\d+)\}(.*)$/;
+          const match = filePath.match(bracePattern);
+
+          if (match) {
+            const [_, prefix, start, end, suffix] = match;
+            const startNum = parseInt(start, 10);
+            const endNum = parseInt(end, 10);
+
+            // Loop through the range and generate file paths
+            for (let i = startNum; i <= endNum; i++) {
+              const expandedFilePath = `${prefix}${i}${suffix}`;
+              const resolvedPath = resolvePath(currentPath, expandedFilePath);
+              const dirPath = resolvedPath.slice(0, -1); // Get the directory path
+              const dir = navigatePath(fs, dirPath); // Navigate to the directory
+              const fileName = resolvedPath[resolvedPath.length - 1];
+
+              if (dir) {
+                if (dir.hasOwnProperty(fileName)) {
+                  outputMessages.push(`touch: '${fileName}' exists`);
+                } else {
+                  dir[fileName] = ""; // Create the file
+                  outputMessages.push(`touch: created '${fileName}'`);
+                }
+              } else {
+                outputMessages.push(
+                  `touch: cannot touch '${expandedFilePath}': No such file or directory`
+                );
+              }
+            }
           } else {
-            dir[filename] = "";
-            outputMessages.push(`touch: created '${filename}'`);
+            const resolvedPath = resolvePath(currentPath, filePath);
+            const dirPath = resolvedPath.slice(0, -1); // Get the directory path
+            const dir = navigatePath(fs, dirPath); // Navigate to the directory
+            const fileName = resolvedPath[resolvedPath.length - 1];
+
+            if (dir) {
+              if (dir.hasOwnProperty(fileName)) {
+                outputMessages.push(`touch: '${fileName}' exists`);
+              } else {
+                dir[fileName] = ""; // Create the file
+                outputMessages.push(`touch: created '${fileName}'`);
+              }
+            } else {
+              outputMessages.push(
+                `touch: cannot touch '${filePath}': No such file or directory`
+              );
+            }
           }
         });
 
@@ -351,44 +431,63 @@ export async function executeCommand(command, args, history = []) {
 
     case "rm":
       if (args.length > 0) {
-        const dir = navigatePath(fs, currentPath);
         let filesToRemove = [];
+        let recursive = false;
 
+        // Check if recursive flag is used
         if (args[0] === "-r") {
-          filesToRemove = args.slice(1).includes("*")
-            ? matchFilesWithWildcard(dir, args[1])
-            : args.slice(1);
-
-          filesToRemove.forEach((file) => {
-            if (dir.hasOwnProperty(file)) {
-              if (typeof dir[file] === "object") {
-                delete dir[file];
-              } else {
-                delete dir[file];
-              }
-            } else {
-              output = `rm: cannot remove '${file}': No such file or directory`;
-            }
-          });
+          recursive = true;
+          filesToRemove = args.slice(1);
         } else {
-          filesToRemove = args[0].includes("*")
-            ? matchFilesWithWildcard(dir, args[0])
-            : [args[0]];
-
-          filesToRemove.forEach((file) => {
-            if (dir.hasOwnProperty(file)) {
-              if (typeof dir[file] === "object") {
-                output = `rm: cannot remove '${file}': Is a directory`;
-              } else {
-                delete dir[file];
-              }
-            } else {
-              output = `rm: cannot remove '${file}': No such file or directory`;
-            }
-          });
+          filesToRemove = args;
         }
 
-        output = "";
+        filesToRemove.forEach((filePath) => {
+          const resolvedPath = resolvePath(currentPath, filePath);
+          const dir = navigatePath(fs, resolvedPath.slice(0, -1)); // Navigate to the directory containing the file
+          const fileName = resolvedPath[resolvedPath.length - 1];
+
+          if (dir) {
+            if (fileName.includes("*")) {
+              // Handle wildcard deletion
+              const regexPattern = new RegExp(
+                "^" + fileName.replace(/\*/g, ".*") + "$"
+              );
+              const matchingFiles = Object.keys(dir).filter((file) =>
+                regexPattern.test(file)
+              );
+
+              if (matchingFiles.length > 0) {
+                matchingFiles.forEach((file) => {
+                  if (typeof dir[file] === "object" && !recursive) {
+                    output += `rm: cannot remove '${file}': Is a directory\n`;
+                  } else {
+                    delete dir[file];
+                  }
+                });
+              } else {
+                output += `rm: cannot remove '${filePath}': No such file or directory\n`;
+              }
+            } else if (dir.hasOwnProperty(fileName)) {
+              // Handle normal file or directory deletion
+              if (typeof dir[fileName] === "object") {
+                if (recursive) {
+                  delete dir[fileName];
+                } else {
+                  output += `rm: cannot remove '${fileName}': Is a directory\n`;
+                }
+              } else {
+                delete dir[fileName];
+              }
+            } else {
+              output += `rm: cannot remove '${filePath}': No such file or directory\n`;
+            }
+          } else {
+            output += `rm: cannot remove '${filePath}': No such file or directory\n`;
+          }
+        });
+
+        output = output.trim(); // Clean up any trailing newlines
       } else {
         output = "rm: missing operand";
       }
@@ -424,20 +523,26 @@ export async function executeCommand(command, args, history = []) {
       break;
 
     case "cat":
-      if (args[0]) {
-        const dir = navigatePath(fs, currentPath);
+      if (args.length > 0) {
+        let outputLines = [];
 
-        console.log("Directory for cat:", dir); // Log the current directory
+        args.forEach((filePath) => {
+          const resolvedPath = resolvePath(currentPath, filePath);
+          const dir = navigatePath(fs, resolvedPath.slice(0, -1)); // Navigate to the directory containing the file
+          const filename = resolvedPath[resolvedPath.length - 1];
 
-        if (dir.hasOwnProperty(args[0])) {
-          if (typeof dir[args[0]] === "string") {
-            output = dir[args[0]];
+          if (dir && dir.hasOwnProperty(filename)) {
+            if (typeof dir[filename] === "string") {
+              outputLines.push(dir[filename]);
+            } else {
+              outputLines.push(`cat: ${filename}: Is a directory`);
+            }
           } else {
-            output = `cat: ${args[0]}: Is a directory`;
+            outputLines.push(`cat: ${filePath}: No such file or directory`);
           }
-        } else {
-          output = `cat: ${args[0]}: No such file or directory`;
-        }
+        });
+
+        output = outputLines.join("\n");
       } else {
         output = "cat: missing file operand";
       }
@@ -460,37 +565,53 @@ export async function executeCommand(command, args, history = []) {
         output = args.join(" ");
       }
       break;
-
     case "cp":
       if (args.length < 2) {
         output = "cp: missing file operand";
       } else {
-        const srcDir = navigatePath(fs, currentPath);
+        const sourcePath = resolvePath(currentPath, args[0]);
         const destPath = resolvePath(currentPath, args[args.length - 1]);
-        const destDir = navigatePath(fs, destPath);
 
-        let filesToCopy = args.slice(0, -1);
+        const sourceDir = navigatePath(fs, sourcePath.slice(0, -1));
+        const sourceFile = sourcePath[sourcePath.length - 1];
 
-        if (filesToCopy.length === 1 && filesToCopy[0].includes("*")) {
-          filesToCopy = matchFilesWithWildcard(srcDir, filesToCopy[0]);
+        let destDir = navigatePath(fs, destPath);
+
+        if (!destDir) {
+          const destParentDir = navigatePath(fs, destPath.slice(0, -1));
+          const destDirName = destPath[destPath.length - 1];
+          destParentDir[destDirName] = {};
+          destDir = destParentDir[destDirName];
         }
 
-        if (filesToCopy.length > 0) {
-          filesToCopy.forEach((file) => {
-            if (srcDir.hasOwnProperty(file)) {
-              if (typeof destDir === "object") {
-                destDir[file] = srcDir[file];
-              } else {
-                output = `cp: target '${
-                  args[args.length - 1]
-                }' is not a directory`;
-                return;
-              }
-            } else {
-              output = `cp: cannot copy '${file}': No such file or directory`;
+        if (sourceDir && sourceDir.hasOwnProperty(sourceFile)) {
+          let destFileName = sourceFile;
+          const fileParts = sourceFile.split(".");
+          const fileExtension = fileParts.length > 1 ? fileParts.pop() : ""; // Get the extension if it exists
+          let baseName = fileParts.join("."); // Rejoin the base name
+
+          if (destDir.hasOwnProperty(destFileName)) {
+            // If the file already exists, create a new name with "-Copy"
+            destFileName = `${baseName}-Copy${
+              fileExtension ? "." + fileExtension : ""
+            }`;
+            let copyIndex = 1;
+
+            // Ensure the name is unique by appending a number if needed
+            while (destDir.hasOwnProperty(destFileName)) {
+              destFileName = `${baseName}-Copy${copyIndex}${
+                fileExtension ? "." + fileExtension : ""
+              }`;
+              copyIndex++;
             }
-          });
-          output = "";
+          }
+
+          if (typeof destDir === "object") {
+            destDir[destFileName] = sourceDir[sourceFile];
+            output = "";
+          } else {
+            output = `cp: target '${args[args.length - 1]}' is not a directory`;
+          }
         } else {
           output = `cp: cannot copy '${args[0]}': No such file or directory`;
         }

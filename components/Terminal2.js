@@ -1,4 +1,4 @@
-import { executeCommand } from "./CommandHandler";
+import { executeCommand, resolvePath } from "./CommandHandler";
 import styled from "styled-components";
 import React, { useState, useEffect, useRef } from "react";
 
@@ -40,18 +40,48 @@ const Terminal2 = () => {
     }
   }, [history]);
 
+  const resolvePath = (cwd, path = "") => {
+    let newPath = path.startsWith("/")
+      ? path.split("/").filter(Boolean)
+      : [...cwd, ...path.split("/").filter(Boolean)];
+
+    const resolvedPath = [];
+    for (const part of newPath) {
+      if (part === "..") {
+        resolvedPath.pop();
+      } else if (part !== ".") {
+        resolvedPath.push(part);
+      }
+    }
+    return resolvedPath;
+  };
+
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
-      const [command, ...args] = input.split(" ");
-      const output = await executeCommand(command, args, history);
-      setHistory([...history, `/${currentPath.join("/")}$ ${input}`, output]);
+      const commandLine = input.trim(); // Capture the full command line input
+      const [command, ...args] = commandLine.split(" ");
 
-      // Update the current path if the command was `cd`
-      if (command === "cd" && output === "") {
-        setCurrentPath([...currentPath]); // Trigger re-render
+      // Display the user's command in the terminal
+      setHistory((prevHistory) => [
+        ...prevHistory,
+        `/${currentPath.join("/")}$ ${commandLine}`,
+      ]);
+
+      // Execute the command
+      const output = await executeCommand(command, args, history);
+
+      // Display the output in the terminal, if any
+      if (output) {
+        setHistory((prevHistory) => [...prevHistory, output]);
       }
 
-      setInput("");
+      // Handle special case for `cd` command to update the path
+      if (command === "cd" && output === "") {
+        const newPath = resolvePath(currentPath, args[0]);
+        setCurrentPath(newPath);
+      }
+
+      setInput(""); // Clear the input field
     }
   };
 
